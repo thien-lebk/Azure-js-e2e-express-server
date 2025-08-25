@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: garden-ubuntu
+  name: garden-ubuntu
 
 
 steps:
