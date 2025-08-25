@@ -9,6 +9,11 @@ spec:
   selector:
     matchLabels:
       app: express-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -17,7 +22,7 @@ spec:
       containers:
       - name: express-server
         image: test-registry/express-server:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         resources:
@@ -32,3 +37,15 @@ spec:
           value: "3000"
         - name: NODE_ENV
           value: "production"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20
