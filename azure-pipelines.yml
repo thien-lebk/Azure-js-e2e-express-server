@@ -49,14 +49,51 @@ stages:
         npm run build
       displayName: 'Build Application'
       
+    # Install Docker if needed and check Docker info
+    - script: |
+        # Check if Docker is installed and running
+        if ! command -v docker &> /dev/null; then
+          echo "Docker is not installed. Installing Docker..."
+          # Install Docker (this is a simplified example)
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -aG docker $USER
+        fi
+        
+        # Display Docker version and info
+        docker --version
+        docker info
+      displayName: 'Setup Docker'
+      
     # Build Docker image
     - script: |
+        # Verify Dockerfile exists
+        ls -la docker/
+        
+        # Build the Docker image
         docker build -t $(dockerRegistry)/$(imageName):$(Build.BuildNumber) -t $(dockerRegistry)/$(imageName):latest -f docker/DOCKERFILE .
       displayName: 'Build Docker image'
     
     # Push Docker image
     - script: |
+        # Skip if registry credentials are not set
+        if [ -z "$(registryUser)" ] || [ -z "$(registryPassword)" ]; then
+          echo "Registry credentials not set. Skipping push."
+          exit 0
+        fi
+        
+        # Login to registry
+        echo "Logging in to Docker registry..."
         docker login $(dockerRegistry) -u $(registryUser) -p $(registryPassword)
+        
+        # Push images
+        echo "Pushing images to registry..."
         docker push $(dockerRegistry)/$(imageName):$(Build.BuildNumber)
         docker push $(dockerRegistry)/$(imageName):latest
       displayName: 'Push Docker image'
