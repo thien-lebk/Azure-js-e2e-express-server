@@ -1,22 +1,104 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Node.js with Docker and Kubernetes CI/CD pipeline
+# Build, test, and deploy a Node.js project with Docker and Kubernetes
 
 trigger:
 - main
 
+# Define variables for different environments
+variables:
+  # Common variables
+  dockerRegistry: 'test-registry'  # Replace with your container registry
+  imageName: 'express-server'
+  k8sNamespace: 'default'  # Default namespace
+  Environment: 'Development'  # Default environment
+  
+  # You can create variable groups in Azure DevOps Library later
+
 pool:
   name: garden-ubuntu
 
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: BuildTest
+    displayName: 'Build, Lint and Test'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+    # Install dependencies
+    - script: |
+        npm install
+      displayName: 'Install Dependencies'
+      
+    # Run linting
+    - script: |
+        npm run lint
+      displayName: 'Run Linting'
+      
+    # Run tests
+    - script: |
+        npm test
+      displayName: 'Run Tests'
+      
+    # Build the application
+    - script: |
+        npm run build
+      displayName: 'Build Application'
+      
+    # Build Docker image
+    - script: |
+        docker build -t $(dockerRegistry)/$(imageName):$(Build.BuildNumber) -t $(dockerRegistry)/$(imageName):latest -f docker/DOCKERFILE .
+      displayName: 'Build Docker image'
+    
+    # Push Docker image
+    - script: |
+        docker login $(dockerRegistry) -u $(registryUser) -p $(registryPassword)
+        docker push $(dockerRegistry)/$(imageName):$(Build.BuildNumber)
+        docker push $(dockerRegistry)/$(imageName):latest
+      displayName: 'Push Docker image'
+      # Note: For security, set registryUser and registryPassword in pipeline variables
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+- stage: Deploy
+  displayName: 'Deploy to Kubernetes'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: DeployToK8s
+    displayName: 'Deploy to Kubernetes'
+    steps:
+    # Install kubectl if needed
+    - script: |
+        if ! command -v kubectl &> /dev/null; then
+          curl -LO "https://dl.k8s.io/release/stable.txt"
+          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+        fi
+      displayName: 'Install kubectl if needed'
+        
+    # Configure kubectl (use appropriate method for your setup)
+    - script: |
+        # Either use kubeconfig from variables or from a file
+        echo "$(kubeconfig)" > $(Agent.TempDirectory)/config
+        export KUBECONFIG=$(Agent.TempDirectory)/config
+      displayName: 'Configure kubectl'
+        
+    # Update Kubernetes manifests with the new image tag
+    - script: |
+        # Update image tag in deployment.yaml
+        sed -i 's|image: $(imageName):.*|image: $(dockerRegistry)/$(imageName):$(Build.BuildNumber)|g' kubernetes/deployment.yaml
+      displayName: 'Update Kubernetes manifests'
+            
+    # Apply Kubernetes manifests
+    - script: |
+        # Apply manifests
+        kubectl apply -f kubernetes/deployment.yaml -n $(k8sNamespace)
+        kubectl apply -f kubernetes/service.yaml -n $(k8sNamespace)
+            
+        # Wait for deployment to complete
+        kubectl rollout status deployment/express-server-deployment -n $(k8sNamespace) --timeout=180s
+      displayName: 'Deploy to Kubernetes'
