@@ -11,7 +11,7 @@ variables:
   imageName: 'express-server'
   k8sNamespace: 'default'  # Default namespace
   Environment: 'Development'  # Default environment
-  
+  nodeVersion: 'lts/*'  # Default Node.js version
   # You can create variable groups in Azure DevOps Library later
 
 pool:
@@ -26,7 +26,7 @@ stages:
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: '20.x'
+        versionSpec: '$(nodeVersion)'
       displayName: 'Install Node.js'
 
     # Install dependencies
