@@ -11,7 +11,7 @@ variables:
   imageName: 'express-server'
   k8sNamespace: 'default'  # Default namespace
   Environment: 'Development'  # Default environment
-  nodeVersion: '20.x'  # Default Node.js version
+  nodeVersion: 'lts'  # Default Node.js version
   # You can create variable groups in Azure DevOps Library later
 
 pool:
