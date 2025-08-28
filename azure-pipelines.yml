@@ -1,4 +1,4 @@
-# Node.js with Docker and Kubernetes CI/CD pipeline.
+# Node.js with Docker and Kubernetes CI/CD pipeline
 # Build, test, and deploy a Node.js project with Docker and Kubernetes
 
 trigger:
