@@ -90,7 +90,12 @@ stages:
         # Login to registry
         echo "Logging in to Docker registry..."
         docker login $(dockerRegistry) -u $(registryUser) -p $(registryPassword)
-        
+        if [ $? -ne 0 ]; then
+          echo "Docker login failed!"
+          exit 1
+        else
+          echo "Docker login succeeded."
+        fi
         # Push images
         echo "Pushing images to registry..."
         docker push $(dockerRegistry)/$(imageName):$(Build.BuildNumber)
