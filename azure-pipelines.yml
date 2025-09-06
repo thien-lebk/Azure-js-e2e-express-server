@@ -85,7 +85,7 @@ stages:
         # Skip if registry credentials are not set
         if [ -z "$(registryUser)" ] || [ -z "$(registryPassword)" ]; then
           echo "Registry credentials not set. Skipping push."
-          exit 0
+          exit 1
         fi
         
         # Login to registry
