@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run lint",
     "start": "node src/index.js",
-    "start:dev": "npm run lint && nodemon --exec node src/index.js --unhandled-rejections=warn",
+    "dev": "npm run lint && nodemon --exec node src/index.js --unhandled-rejections=warn",
     "test": "jest --detectOpenHandles --coverage",
     "lint": "eslint src/**/*.js --fix"
   },
@@ -41,7 +41,8 @@
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "prettier": {
     "printWidth": 80,

@@ -2,7 +2,7 @@ const server = require('./server');
 
 // App Service on Windows: PORT
 // App Service on Linux: WEB_PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const hostname = '0.0.0.0';
 
 server.create()
