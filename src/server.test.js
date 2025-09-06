@@ -19,7 +19,7 @@ describe('root', () => {
       .get('/api/hello')
       .expect(200)
       .then((res) => {
-        expect(res.body).toEqual({ hello: 'goodbye' });
+        expect(res.body).toEqual({ hello: 'Hello' });
       }));
 
   it('request invalid path, returns 404', () => {
