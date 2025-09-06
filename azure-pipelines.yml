@@ -6,14 +6,7 @@ trigger:
 
 # Define variables for different environments
 variables:
-  # Common variables
-  dockerRegistry: 'docker.io/bhnhox'  # Replace with your container registry
-  imageName: 'express-server'
-  k8sNamespace: 'default'  # Default namespace
-  Environment: 'Development'  # Default environment
-  nodeVersion: '22.x'  # Default Node.js version
-  # You can create variable groups in Azure DevOps Library later
-
+- group: my-dockerhub-secrets
 pool:
   name: garden-ubuntu
 
