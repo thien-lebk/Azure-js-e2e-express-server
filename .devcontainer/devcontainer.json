@@ -8,11 +8,11 @@
   },
   "remoteUser": "node",
   "forwardPorts": [
-    3000,
+    3001,
     8000
   ],
   "portsAttributes": {
-    "3000": {
+    "3001": {
       "label": "Home Page",
       "onAutoForward": "notify"
     }

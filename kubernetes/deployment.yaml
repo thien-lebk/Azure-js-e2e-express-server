@@ -24,7 +24,7 @@ spec:
         image: test-registry/express-server:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 3000
+        - containerPort: 3001
         resources:
           limits:
             cpu: "0.5"
@@ -34,18 +34,18 @@ spec:
             memory: "256Mi"
         env:
         - name: PORT
-          value: "3000"
+          value: "3001"
         - name: NODE_ENV
           value: "production"
         readinessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: 3001
           initialDelaySeconds: 5
           periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: 3001
           initialDelaySeconds: 15
           periodSeconds: 20
