@@ -67,9 +67,9 @@ stages:
       displayName: 'Setup Docker'
     # Debug: Show Docker-related environment variables (do not print secrets!)
     - script: |
-        echo "registryUser: $registryUser"
-        echo "dockerRegistry: $dockerRegistry"
-        echo "imageName: $imageName"
+        echo "dockerRegistry: $(dockerRegistry)"
+        echo "registryUser: $(registryUser)"
+        echo "imageName: $(imageName)"
       displayName: 'Show Docker env vars'
       
     # Build Docker image
