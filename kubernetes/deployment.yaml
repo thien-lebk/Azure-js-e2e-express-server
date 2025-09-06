@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: express-server
-        image: test-registry/express-server:latest
+        image: docker.io/bhnhox/express-server:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3001
