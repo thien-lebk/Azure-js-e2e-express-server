@@ -63,6 +63,12 @@ stages:
         docker --version
         docker info
       displayName: 'Setup Docker'
+    # Debug: Show Docker-related environment variables (do not print secrets!)
+    - script: |
+        echo "registryUser: $registryUser"
+        echo "dockerRegistry: $dockerRegistry"
+        echo "imageName: $imageName"
+      displayName: 'Show Docker env vars'
       
     # Build Docker image
     - script: |
@@ -92,12 +98,7 @@ stages:
       displayName: 'Push Docker image'
       # Note: For security, set registryUser and registryPassword in pipeline variables
 
-    # Debug: Show Docker-related environment variables (do not print secrets!)
-    - script: |
-        echo "registryUser: $registryUser"
-        echo "dockerRegistry: $dockerRegistry"
-        echo "imageName: $imageName"
-      displayName: 'Show Docker env vars'
+  
 
 - stage: Deploy
   displayName: 'Deploy to Kubernetes'
