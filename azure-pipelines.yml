@@ -143,6 +143,14 @@ stages:
         else
           echo "Warning: service.yaml not found!"
         fi
+        
+        # Apply Ingress manifest if it exists
+        if [ -f kubernetes/ingress.yaml ]; then
+          echo "Applying ingress manifest..."
+          kubectl apply -f kubernetes/ingress.yaml -n $(k8sNamespace)
+        else
+          echo "Warning: ingress.yaml not found!"
+        fi
             
         # Wait for deployment with shorter timeout and add diagnostics
         echo "Waiting for deployment to roll out (max 60 seconds)..."
@@ -160,12 +168,3 @@ stages:
           exit 0
         }
       displayName: 'Deploy to Kubernetes'
-      # In the Deploy stage, after applying deployment.yaml and service.yaml
-    - script: |
-        # Apply Ingress manifest
-        echo "Applying ingress manifest..."
-        kubectl apply -f kubernetes/ingress.yaml -n $(k8sNamespace)
-        
-        # Verify Ingress is created
-        kubectl get ingress -n $(k8sNamespace)
-      displayName: 'Deploy Ingress'
