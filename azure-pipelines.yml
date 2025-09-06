@@ -7,7 +7,7 @@ trigger:
 # Define variables for different environments
 variables:
   # Common variables
-  dockerRegistry: 'test-registry'  # Replace with your container registry
+  dockerRegistry: 'docker.io/bhnhox'  # Replace with your container registry
   imageName: 'express-server'
   k8sNamespace: 'default'  # Default namespace
   Environment: 'Development'  # Default environment
