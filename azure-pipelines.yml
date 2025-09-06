@@ -7,6 +7,8 @@ trigger:
 # Define variables for different environments
 variables:
 - group: my-dockerhub-secrets
+- name: dockerRegistry
+  value: 'test'  # Specify the Node.js version
 pool:
   name: garden-ubuntu
 
