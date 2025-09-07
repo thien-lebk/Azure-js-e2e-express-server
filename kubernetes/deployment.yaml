@@ -19,7 +19,7 @@ spec:
       labels:
         app: express-server
     spec:
-      containers:
+  containers:
       - name: express-server
         image: docker.io/bhnhox/express-server:latest
         imagePullPolicy: IfNotPresent
@@ -43,9 +43,13 @@ spec:
             port: 3001
           initialDelaySeconds: 5
           periodSeconds: 10
+
         livenessProbe:
           httpGet:
             path: /
             port: 3001
           initialDelaySeconds: 15
           periodSeconds: 20
+
+      imagePullSecrets:
+        - name: regcred
