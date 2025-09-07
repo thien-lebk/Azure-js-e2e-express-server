@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: add-api-prefix
+  namespace: default
+spec:
+  replacePathRegex:
+    regex: ^/swagger-ui(.*)
+    replacement: /api/swagger-ui$1
