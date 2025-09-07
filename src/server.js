@@ -39,8 +39,6 @@ const utils = require('./utils');
 
 // fn to create express server
 const create = async () => {
-
-    // server
     const app = express();
     app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
     // Swagger UI route with OAuth config and custom redirect URL
