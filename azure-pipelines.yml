@@ -89,7 +89,7 @@ stages:
         
         # Login to registry
         echo "Logging in to Docker registry..."
-        docker login $(dockerRegistry) -u $(registryUser) -p $(registryPassword)
+        docker login -u $(registryUser) -p $(registryPassword)
         if [ $? -ne 0 ]; then
           echo "Docker login failed!"
           exit 1
