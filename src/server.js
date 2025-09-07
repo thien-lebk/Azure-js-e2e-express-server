@@ -57,7 +57,7 @@ const create = async () => {
     app.use(utils.appLogger);
 
     // root route - serve static file
-    app.get('/api/hello', (req, res) => {
+    app.get('/hello', (req, res) => {
         res.json({ hello: 'Hello' });
         res.end();
     });
