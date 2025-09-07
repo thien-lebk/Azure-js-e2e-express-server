@@ -16,7 +16,7 @@ describe('root', () => {
       }));
 
   it('request api, returns json', () => request(app)
-      .get('/api/hello')
+      .get('/hello')
       .expect(200)
       .then((res) => {
         expect(res.body).toEqual({ hello: 'Hello' });
