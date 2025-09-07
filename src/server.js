@@ -42,7 +42,7 @@ const create = async () => {
     const app = express();
     app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
     // Swagger UI route with OAuth config and custom redirect URL
-    app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, false, {
+    app.use('/api/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument, false, {
         oauth: {
             clientId: 'a81a583b-9276-4c34-bbc5-23717231e67f',
             scopes: ['openid', 'profile', 'email'],
