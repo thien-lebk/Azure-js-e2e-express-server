@@ -153,6 +153,7 @@ stages:
         # Apply Ingress manifest if it exists
         if [ -f kubernetes/ingress.yaml ]; then
           echo "Applying ingress manifest..."
+          kubectl apply -f kubernetes/middleware-strip-api.yaml
           kubectl apply -f kubernetes/ingress.yaml -n $(k8sNamespace)
         else
           echo "Warning: ingress.yaml not found!"
